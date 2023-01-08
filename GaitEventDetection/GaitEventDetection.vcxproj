@@ -88,6 +88,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\BSN\source\repos\GaitEventDetection\GaitEventDetection\sciplot;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,11 +143,12 @@
   <ItemGroup>
     <ClCompile Include="EventDetection.cpp" />
     <ClCompile Include="GaitEventDetection.cpp" />
+    <ClCompile Include="General.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EventDetection.h" />
+    <ClInclude Include="General.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
