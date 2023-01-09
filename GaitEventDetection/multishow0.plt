@@ -73,6 +73,7 @@ set style data histogram
 # PLOT COMMANDS
 #==============================================================================
 plot \
-    'plot0.dat' index 0 title 'Gyro' with lines linestyle 1 linewidth 2
+    'plot0.dat' index 0 title 'Gyro-0' with lines linestyle 1 linewidth 2, \
+    'plot0.dat' index 1 title 'Gyro-1' with lines linestyle 2 linewidth 2
 
 

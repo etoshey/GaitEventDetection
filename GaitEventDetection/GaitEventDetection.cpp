@@ -49,12 +49,11 @@ int main()
    //string path = "../Debug/IMUdata/";
    //for (const auto& entry : fs::directory_iterator(path))
 	  // cout << entry.path() << std::endl;
+
+
+
  
-
-
    General general_function;
-   
-
    //Read data file 
    ifstream Data_Reader("../Debug/IMUdata/test.csv");
    if (Data_Reader.fail()) {
@@ -93,15 +92,36 @@ int main()
 	   
 	   cout << "Line count:" << imu_data.size() << endl;
 
-	   vector<double> Y,X;	 
+	
+
+	   vector<double> gyro,time,acc;	 
 	   for (auto i = imu_data.begin(); i != imu_data.end();i++) {
-		   Y.push_back((*i).gyro);		  
-		   X.push_back((*i).time);		  
+		   gyro.push_back((*i).gyro);		  
+		   time.push_back((*i).time);		  
+		   acc.push_back((*i).Zacc);
 	   }
 
+	   //apply low-pass filter
+	   vector<double> lp_data =  general_function.LowpassFilter(&gyro, 2 , 500,15);
 
+
+
+	   //get Right foot event
+	   EventDetection _event_detector(&gyro,&acc,&time);
+	   vector<EVENT> right_event;
+	   _event_detector.getEvent(&right_event,"R");
+	   cout << "Right foot event count :" << right_event.size() << endl;
+
+	   //get Left foot event
+	   _event_detector.set_parameters(&gyro, &acc, &time);
+	   vector<EVENT> left_event;
+	   _event_detector.getEvent(&left_event,"L");
+	   cout << "Left foot event count :" << left_event.size() << endl;
+
+
+	   vector<vector<double>> plot_list = { gyro,lp_data };
 	   //plot gyro data
-	   general_function.plot(&X, &Y,"Gyro");
+	   general_function.plot(&time, &plot_list,"Gyro");
 
 
    }

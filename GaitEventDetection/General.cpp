@@ -1,8 +1,6 @@
 #include "General.h"
 
 
-
-
 //Split string
 vector<string> General::str_split(string s, string delimiter) {
 
@@ -32,13 +30,14 @@ vector<string> General::str_split(string s, string delimiter) {
 	//result.push_back(s.substr(start_pos));
 	return result;
 }
-
-
-void General::plot(vector<double>* xval, vector<double>* yval, string legend) {
+void General::plot(vector<double>* xval, vector<vector<double>>* yval , string legend) {
 	
 
 	Vec x = Vec(xval->data(), xval->size());
-	Vec y = Vec(yval->data(), yval->size());	
+	vector<Vec> y_list;
+	for (auto i = yval->begin(); i != yval->end(); i++) {	
+		y_list.push_back(Vec(i->data(), i->size()));
+	}		
 
 	// Create a Plot object
 	Plot2D plot;
@@ -54,8 +53,9 @@ void General::plot(vector<double>* xval, vector<double>* yval, string legend) {
 	plot.ylabel(legend);
 
 	// Set the x and y ranges
+	//TODO:: find min & max y axis from all Ylist
 	plot.xrange(x[0], x[x.size()-1]);
-	plot.yrange(y.min()-10, y.max()+10);
+	plot.yrange(y_list.at(0).min()-10, y_list.at(0).max()+10);
 
 
 	// Set the legend to be on the bottom along the horizontal
@@ -65,8 +65,10 @@ void General::plot(vector<double>* xval, vector<double>* yval, string legend) {
 		.displayExpandWidthBy(1);
 
 	// Plot sin(i*x) from i = 1 to i = 6
-	plot.drawCurve(x, y).label(legend);
-
+	for (int i = 0; i < y_list.size(); i++)
+	{
+		plot.drawCurve(x, y_list[i]).label(legend+"-"+to_string(i));
+	}		
 
 	// Create figure to hold plot
 	Figure fig = { {plot} };
@@ -78,4 +80,27 @@ void General::plot(vector<double>* xval, vector<double>* yval, string legend) {
 
 	// Show the plot in a pop-up window
 	canvas.show();
+}
+vector<double> General::LowpassFilter(vector<double>* data,int order,int sampligrate,int cutoff_freq) {
+
+	vector<double> result;
+	Iir::Butterworth::LowPass<> f;	
+	f.setup(order,sampligrate, cutoff_freq);	
+	
+	for (auto i = data->begin(); i != data->end(); i++) {		
+		result.push_back(f.filter(*i));
+	}
+	
+	return result;
+}
+double General::getAvg(vector<double>* v) {
+	return accumulate(v->begin(), v->end(), 0.0) / v->size();
+}
+double General::getStd(vector<double>* v) {	
+	double avg = getAvg(v);
+	double sum = 0;
+	for (auto i = v->begin(); i != v->end(); i++) {
+		sum += pow(*i - avg, 2);
+	}
+	return sqrt(sum / (v->size() - 1));
 }

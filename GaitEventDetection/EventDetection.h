@@ -2,23 +2,33 @@
 
 #include <iostream>
 #include <vector>
-#include <numeric>
+#include "General.h"
 
 
 using namespace std;
 
 
+class EVENT {
+public:
+	int Index;
+	int Type;
+	int xval;
+	double yval;
+	string name;
+};
+
 class EventDetection {
 public:
-	vector<double> local_acceleration;
-	vector<double> local_algular_velocity;
-	vector<double> time;
+	EventDetection(vector<double>* gyro, vector<double>* acc, vector<double>* time);
+	void getEvent(vector<EVENT>* res,string side);
+	void set_parameters(vector<double>* gyro, vector<double>* acc, vector<double>* time);
 
-	double compute_gyro_avg(vector<double>& v);
 
 private:
-	double angular_vel_avg = 0;
-	double angular_vel_std = 0;
-
+	vector<double>* local_acceleration;
+	vector<double>* local_algular_velocity;
+	vector<double>* time;
+	General general_function;
 };
+
 
