@@ -21,7 +21,7 @@ void EventDetection::getEvent(vector<EVENT>* result, string side) {
 			if (local_algular_velocity->at(i) < max_val) {
 				max_val = local_algular_velocity->at(i);
 				detection = true;
-				index = 1;
+				index = i;
 			}
 		}
 		else if (local_algular_velocity->at(i) > -0.2 * std){

@@ -74,6 +74,8 @@ set style data histogram
 #==============================================================================
 plot \
     'plot0.dat' index 0 title 'Gyro-0' with lines linestyle 1 linewidth 2, \
-    'plot0.dat' index 1 title 'Gyro-1' with lines linestyle 2 linewidth 2
+    'plot0.dat' index 1 title 'Gyro-1' with lines linestyle 2 linewidth 2, \
+    'plot0.dat' index 2 title 'HC' with points linestyle 3 linewidth 2 pointtype 6 pointsize 1, \
+    'plot0.dat' index 3 title 'TF' with points linestyle 4 linewidth 2 pointtype 6 pointsize 1
 
 

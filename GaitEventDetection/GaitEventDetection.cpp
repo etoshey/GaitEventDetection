@@ -118,10 +118,36 @@ int main()
 	   _event_detector.getEvent(&left_event,"L");
 	   cout << "Left foot event count :" << left_event.size() << endl;
 
+	   //prepare to plot
+	   vector<double> XR_event_HC, YR_event_HC, XL_event_HC, YL_event_HC, XR_event_TF, YR_event_TF, XL_event_TF, YL_event_TF;
+	   for (auto i = right_event.begin(); i != right_event.end(); i++) {
+		   if ((*i).Type == 0) {
+			   XR_event_HC.push_back((*i).xval);
+			   YR_event_HC.push_back((*i).yval);
+		   }
+		   else {
+			   XR_event_TF.push_back((*i).xval);
+			   YR_event_TF.push_back((*i).yval);
+		   }
+	   }
+	   for (auto i = left_event.begin(); i != left_event.end(); i++) {
+		   XL_event_HC.push_back((*i).xval);
+		   YL_event_HC.push_back((*i).yval);
+	   }
+
 
 	   vector<vector<double>> plot_list = { gyro,lp_data };
-	   //plot gyro data
-	   general_function.plot(&time, &plot_list,"Gyro");
+	   
+		// Create a Plot object
+	   Plot2D plot;
+	   general_function.plot(&time, &plot_list,"Gyro" , &plot);
+	   general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
+	   general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
+	   general_function.Drawplot(&plot);
+
+
+	   //Save on File
+
 
 
    }

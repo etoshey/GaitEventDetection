@@ -30,7 +30,10 @@ vector<string> General::str_split(string s, string delimiter) {
 	//result.push_back(s.substr(start_pos));
 	return result;
 }
-void General::plot(vector<double>* xval, vector<vector<double>>* yval , string legend) {
+
+//----------------------------------------------------------------------------------------------------//
+
+void General::plot(vector<double>* xval, vector<vector<double>>* yval , string legend, Plot2D *plot) {
 	
 
 	Vec x = Vec(xval->data(), xval->size());
@@ -39,8 +42,7 @@ void General::plot(vector<double>* xval, vector<vector<double>>* yval , string l
 		y_list.push_back(Vec(i->data(), i->size()));
 	}		
 
-	// Create a Plot object
-	Plot2D plot;
+
 
 	// Set the width and height of the plot in points (72 points = 1 inch)
 	//plot.size(800, 600);
@@ -49,17 +51,17 @@ void General::plot(vector<double>* xval, vector<vector<double>>* yval , string l
 
 
 	// Set the x and y labels
-	plot.xlabel("time(ms)");
-	plot.ylabel(legend);
+	plot->xlabel("time(ms)");
+	plot->ylabel(legend);
 
 	// Set the x and y ranges
 	//TODO:: find min & max y axis from all Ylist
-	plot.xrange(x[0], x[x.size()-1]);
-	plot.yrange(y_list.at(0).min()-10, y_list.at(0).max()+10);
+	plot->xrange(x[0], x[x.size()-1]);
+	plot->yrange(y_list.at(0).min()-10, y_list.at(0).max()+10);
 
 
 	// Set the legend to be on the bottom along the horizontal
-	plot.legend()
+	plot->legend()
 		.atOutsideBottomRight()
 		.displayHorizontal()
 		.displayExpandWidthBy(1);
@@ -67,11 +69,18 @@ void General::plot(vector<double>* xval, vector<vector<double>>* yval , string l
 	// Plot sin(i*x) from i = 1 to i = 6
 	for (int i = 0; i < y_list.size(); i++)
 	{
-		plot.drawCurve(x, y_list[i]).label(legend+"-"+to_string(i));
-	}		
-
+		plot->drawCurve(x, y_list[i]).label(legend+"-"+to_string(i));
+	}
+}
+void General::plotPoint(vector<double>* xval, vector<double>* yval, string legend, Plot2D* plot) {
+	Vec x = Vec(xval->data(), xval->size());
+	Vec y = Vec(yval->data(), yval->size());
+	plot->drawPoints(x, y).label(legend).pointType(6).pointSize(1);
+	
+}
+void General::Drawplot(Plot2D* plot) {
 	// Create figure to hold plot
-	Figure fig = { {plot} };
+	Figure fig = { {*plot} };
 	// Create canvas to hold figure
 	Canvas canvas = { {fig} };
 
@@ -81,6 +90,9 @@ void General::plot(vector<double>* xval, vector<vector<double>>* yval , string l
 	// Show the plot in a pop-up window
 	canvas.show();
 }
+
+//----------------------------------------------------------------------------------------------------//
+
 vector<double> General::LowpassFilter(vector<double>* data,int order,int sampligrate,int cutoff_freq) {
 
 	vector<double> result;
@@ -104,3 +116,4 @@ double General::getStd(vector<double>* v) {
 	}
 	return sqrt(sum / (v->size() - 1));
 }
+//----------------------------------------------------------------------------------------------------//
