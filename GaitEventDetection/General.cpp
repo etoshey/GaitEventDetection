@@ -89,6 +89,9 @@ void General::Drawplot(Plot2D* plot) {
 
 	// Show the plot in a pop-up window
 	canvas.show();
+
+	// Save the plot to a SVG file
+	canvas.save("readme.svg");
 }
 
 //----------------------------------------------------------------------------------------------------//

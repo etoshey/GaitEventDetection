@@ -33,8 +33,12 @@ set palette defined ( 0 '#1B9E77',\
 #==============================================================================
 # TERMINAL
 #==============================================================================
-set termoption enhanced
-set terminal GNUTERM size 900,600
+set terminal svg size 900,600 enhanced rounded 
+set encoding utf8
+#==============================================================================
+# OUTPUT
+#==============================================================================
+set output 'readme.svg'
 set encoding utf8
 
 #==============================================================================
@@ -79,3 +83,4 @@ plot \
     'plot0.dat' index 3 title 'TF' with points linestyle 4 linewidth 2 pointtype 6 pointsize 1
 
 
+set output
