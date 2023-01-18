@@ -12,4 +12,4 @@ Mount 2 IMU sensor on the top of both feets. IMU +Y axis is in line with the gai
 
 
 ## Output
-![This is an image](/GaitEventDetection/documents/readme.svg)
+![This is an image](/GaitEventDetection/readme.svg)
