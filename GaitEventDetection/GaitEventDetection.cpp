@@ -155,11 +155,11 @@ int main()
 	   }
 
 
-	   vector<vector<double>> plot_list = { gyro,lp_data };
+	   vector<vector<double>> plot_list = { gyro };
 	   
 		// Create a Plot object
 	   Plot2D plot;
-	   general_function.plot(&time, &plot_list,"Gyro" , &plot);
+	   general_function.plot(&time, &plot_list,"Right-Gyro" , &plot);
 	   general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
 	   general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
 	   general_function.Drawplot(&plot);

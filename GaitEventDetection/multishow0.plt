@@ -47,7 +47,7 @@ set encoding utf8
 set xrange [50121.000000:82914.000000]
 set yrange [-589.101126:317.251413]
 set xlabel 'time(ms)' enhanced textcolor '#404040'
-set ylabel 'Gyro' enhanced textcolor '#404040'
+set ylabel 'Right-Gyro' enhanced textcolor '#404040'
 
 set border 3 front linetype 1 linewidth 2 linecolor '#404040'
 unset grid
@@ -77,10 +77,9 @@ set style data histogram
 # PLOT COMMANDS
 #==============================================================================
 plot \
-    'plot0.dat' index 0 title 'Gyro-0' with lines linestyle 1 linewidth 2, \
-    'plot0.dat' index 1 title 'Gyro-1' with lines linestyle 2 linewidth 2, \
-    'plot0.dat' index 2 title 'HC' with points linestyle 3 linewidth 2 pointtype 6 pointsize 1, \
-    'plot0.dat' index 3 title 'TF' with points linestyle 4 linewidth 2 pointtype 6 pointsize 1
+    'plot0.dat' index 0 title 'Right-Gyro-0' with lines linestyle 1 linewidth 2, \
+    'plot0.dat' index 1 title 'HC' with points linestyle 2 linewidth 2 pointtype 6 pointsize 1, \
+    'plot0.dat' index 2 title 'TF' with points linestyle 3 linewidth 2 pointtype 6 pointsize 1
 
 
 set output
