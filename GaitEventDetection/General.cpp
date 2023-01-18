@@ -120,3 +120,42 @@ double General::getStd(vector<double>* v) {
 	return sqrt(sum / (v->size() - 1));
 }
 //----------------------------------------------------------------------------------------------------//
+
+bool General::WritetoFile(vector<double>* RHC, vector<double>* RTF, vector<double>* LHC, vector<double>* LTF) {
+
+	int line = 0;
+	//Wriet to File
+	ofstream _writer;
+
+	try
+	{
+		_writer.open("Eventresults.txt", ios::trunc);
+		_writer << "Automatic Gait Event Detection based on IMU" << endl;
+		_writer << "Right HC\tRight TF\tLeft HC\tLeft TF" << endl;
+
+		string txt;
+		while (true)
+		{
+			txt = (line < RHC->size()) ? to_string(RHC->at(line)) : "0";
+			txt += "\t";
+			txt += (line < RTF->size()) ? to_string(RTF->at(line)) : "0";
+			txt += "\t";
+			txt += (line < LHC->size()) ? to_string(LHC->at(line)) : "0";
+			txt += "\t";
+			txt += (line < LTF->size()) ? to_string(LTF->at(line)) : "0";
+			txt += "\t";
+
+			if (line >= RHC->size() && line >= RTF->size() && line >= LHC->size() && line >= LTF->size()) break;
+
+			_writer << txt << endl;
+			line++;
+		}
+		
+		return true;
+	}
+	catch (const std::exception& ex)
+	{
+		cout << ex.what() << endl;
+		return false;
+	}
+}

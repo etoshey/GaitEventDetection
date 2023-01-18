@@ -5,6 +5,7 @@
 #include <numeric>
 #include <cmath>
 #include <Iir.h>
+#include <string.h>
 #include "sciplot/sciplot.hpp"
 
 using namespace std;
@@ -19,6 +20,7 @@ public:
 	vector<double> LowpassFilter(vector<double>* data, int order, int sampligrate, int cutoff_freq);
 	double getAvg(vector<double>* v);
 	double getStd(vector<double>* v);
+	bool WritetoFile(vector<double>* RHC, vector<double>* RTF, vector<double>* LHC, vector<double>* LTF);
 private:
 	
 

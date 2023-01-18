@@ -144,8 +144,14 @@ int main()
 		   }
 	   }
 	   for (auto i = left_event.begin(); i != left_event.end(); i++) {
-		   XL_event_HC.push_back((*i).xval);
-		   YL_event_HC.push_back((*i).yval);
+		   if ((*i).Type == 0) {
+			   XL_event_HC.push_back((*i).xval);
+			   YL_event_HC.push_back((*i).yval);
+		   }
+		   else {
+			   XL_event_TF.push_back((*i).xval);
+			   YL_event_TF.push_back((*i).yval);
+		   }
 	   }
 
 
@@ -159,9 +165,10 @@ int main()
 	   general_function.Drawplot(&plot);
 
 
-	   //Save on File
-
-
+	   //Write to File 
+	   bool res_log = general_function.WritetoFile(&XR_event_HC, &XR_event_TF, &XL_event_HC, &XL_event_TF);
+	   if (res_log) cout << "Result Saved." << endl;
+	   
 
    }
 
