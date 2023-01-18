@@ -6,6 +6,7 @@
 #include <string>
 #include <Windows.h>
 #include <filesystem>
+#include <algorithm>
 #include "EventDetection.h"
 #include "General.h"
 
@@ -31,6 +32,20 @@ public:
 		Xacc = xacc;
 		Yacc = yacc;
 		Zacc = zacc;
+	}
+};
+
+
+struct compare
+{
+	string key;
+	compare(string const& i) : key(i) {}
+
+	bool operator()(string const& i) {		
+		if (i.find(key) != string::npos) {
+			return true;
+		}
+		else return false;
 	}
 };
 
@@ -70,16 +85,14 @@ int main()
 	   vector<string> h2 = general_function.str_split(line, ",");
 
 
-	   //find Gyro x axis 
-	   //in this data x axis is peripendicular on walk way (sagital plane)	   
-	   //TODO:find element that contain header lable
+	   //find Parameters
 
-	   int gyro_index = find(h2.begin(), h2.end(), " GyroX") - h2.begin();
-	   int Time_index = find(h2.begin(), h2.end(), "Time") - h2.begin();
+	   int gyro_index = find_if(h2.begin(), h2.end(), compare("GyroX")) - h2.begin();
+	   int Time_index = find_if(h2.begin(), h2.end(), compare("Time")) - h2.begin();
 
-	   int AccX_index = find(h2.begin(), h2.end(), " AccX") - h2.begin();
-	   int AccY_index = find(h2.begin(), h2.end(), " AccY") - h2.begin();
-	   int AccZ_index = find(h2.begin(), h2.end(), " AccZ") - h2.begin();
+	   int AccX_index = find_if(h2.begin(), h2.end(), compare("AccX")) - h2.begin();
+	   int AccY_index = find_if(h2.begin(), h2.end(), compare("AccY")) - h2.begin();
+	   int AccZ_index = find_if(h2.begin(), h2.end(), compare("AccZ")) - h2.begin();
 
 	   vector<string> temp;
 	   while (getline(Data_Reader, line))
