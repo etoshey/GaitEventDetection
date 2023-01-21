@@ -173,42 +173,42 @@ int main()
 
 	   //prepare to plot
 	   //------------------------------------------------------------------------------------------//
-	 //  vector<double> XR_event_HC, YR_event_HC, XL_event_HC, YL_event_HC, XR_event_TF, YR_event_TF, XL_event_TF, YL_event_TF;
-	 //  for (auto i = right_event.begin(); i != right_event.end(); i++) {
-		//   if ((*i).Type == 0) {
-		//	   XR_event_HC.push_back((*i).xval);
-		//	   YR_event_HC.push_back((*i).yval);
-		//   }
-		//   else {
-		//	   XR_event_TF.push_back((*i).xval);
-		//	   YR_event_TF.push_back((*i).yval);
-		//   }
-	 //  }
-	 //  for (auto i = left_event.begin(); i != left_event.end(); i++) {
-		//   if ((*i).Type == 0) {
-		//	   XL_event_HC.push_back((*i).xval);
-		//	   YL_event_HC.push_back((*i).yval);
-		//   }
-		//   else {
-		//	   XL_event_TF.push_back((*i).xval);
-		//	   YL_event_TF.push_back((*i).yval);
-		//   }
-	 //  }
+	   vector<double> XR_event_HC, YR_event_HC, XL_event_HC, YL_event_HC, XR_event_TF, YR_event_TF, XL_event_TF, YL_event_TF;
+	   for (auto i = right_event.begin(); i != right_event.end(); i++) {
+		   if ((*i).Type == 0) {
+			   XR_event_HC.push_back((*i).xval);
+			   YR_event_HC.push_back((*i).yval);
+		   }
+		   else {
+			   XR_event_TF.push_back((*i).xval);
+			   YR_event_TF.push_back((*i).yval);
+		   }
+	   }
+	   for (auto i = left_event.begin(); i != left_event.end(); i++) {
+		   if ((*i).Type == 0) {
+			   XL_event_HC.push_back((*i).xval);
+			   YL_event_HC.push_back((*i).yval);
+		   }
+		   else {
+			   XL_event_TF.push_back((*i).xval);
+			   YL_event_TF.push_back((*i).yval);
+		   }
+	   }
 
 
-	 //  vector<vector<double>> plot_list = { gyro };
-	 //  
-		//// Create a Plot object
-	 //  Plot2D plot;
-	 //  general_function.plot(&time, &plot_list,"Right-Gyro" , &plot);
-	 //  general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
-	 //  general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
-	 //  general_function.Drawplot(&plot);
+	   vector<vector<double>> plot_list = { Rgyro,Lgyro };
+	   
+		// Create a Plot object
+	   Plot2D plot;
+	   general_function.plot(&Rtime, &plot_list,"R&L Gyro" , &plot);
+	   general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
+	   general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
+	   general_function.Drawplot(&plot);
 
 
-	 //  //Write to File 
-	 //  bool res_log = general_function.WritetoFile(&XR_event_HC, &XR_event_TF, &XL_event_HC, &XL_event_TF);
-	 //  if (res_log) cout << "Result Saved." << endl;
+	   //Write to File 
+	   bool res_log = general_function.WritetoFile(&XR_event_HC, &XR_event_TF, &XL_event_HC, &XL_event_TF);
+	   if (res_log) cout << "Result Saved." << endl;
 
 
    }
