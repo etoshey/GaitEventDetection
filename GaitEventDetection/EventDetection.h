@@ -22,7 +22,7 @@ public:
 	EventDetection(vector<double>* gyro, vector<double>* acc, vector<double>* time);
 	void getEvent(vector<EVENT>* res,string side);
 	void set_parameters(vector<double>* gyro, vector<double>* acc, vector<double>* time);
-
+	void getTemporal(vector<EVENT>* right, vector<EVENT>* left);
 
 private:
 	vector<double>* local_acceleration;

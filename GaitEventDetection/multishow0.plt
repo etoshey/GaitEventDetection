@@ -33,19 +33,15 @@ set palette defined ( 0 '#1B9E77',\
 #==============================================================================
 # TERMINAL
 #==============================================================================
-set terminal svg size 900,600 enhanced rounded 
-set encoding utf8
-#==============================================================================
-# OUTPUT
-#==============================================================================
-set output 'readme.svg'
+set termoption enhanced
+set terminal GNUTERM size 900,600
 set encoding utf8
 
 #==============================================================================
 # SETUP COMMANDS
 #==============================================================================
-set xrange [50121.000000:82914.000000]
-set yrange [-589.101126:317.251413]
+set xrange [42666.000000:71145.000000]
+set yrange [-421.560595:336.049268]
 set xlabel 'time(ms)' enhanced textcolor '#404040'
 set ylabel 'Right-Gyro' enhanced textcolor '#404040'
 
@@ -82,4 +78,3 @@ plot \
     'plot0.dat' index 2 title 'TF' with points linestyle 3 linewidth 2 pointtype 6 pointsize 1
 
 
-set output

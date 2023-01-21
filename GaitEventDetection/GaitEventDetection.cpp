@@ -17,7 +17,7 @@ namespace fs = std::filesystem;
 
 class IMU {
 public:
-
+	string Name;
 	double time;
 	double gyro;
 	double Xacc;
@@ -26,7 +26,8 @@ public:
 
 	IMU() {
 	}
-	void set_param(double t, double g, double xacc, double yacc, double zacc) {
+	void set_param(string name,double t, double g, double xacc, double yacc, double zacc) {
+		Name = name;
 		time = t;
 		gyro = g;
 		Xacc = xacc;
@@ -70,7 +71,7 @@ int main()
  
    General general_function;
    //Read data file 
-   ifstream Data_Reader("../Debug/IMUdata/test.csv");
+   ifstream Data_Reader("../Debug/IMUdata/test2.txt");
    if (Data_Reader.fail()) {
 	   cout << "File Not Found." << endl;	   
    }
@@ -80,95 +81,135 @@ int main()
 	   //push all time,gyro,acc to vector per each line
 	   //First read the header line 
 	   getline(Data_Reader, line);
-	   vector<string> h1 = general_function.str_split(line,",");	  
+	   vector<string> h1 = general_function.str_split(line, ",");
+	   //remove empty header
+	   vector<string> h1_1;
+	   copy_if(h1.begin(), h1.end(), back_inserter(h1_1), [](const string& i) { return i != ""; });
+
 	   getline(Data_Reader, line);
 	   vector<string> h2 = general_function.str_split(line, ",");
 
+	   //Contain "Right Foot" and "Left Foot"  
+	   if (find(h1_1.begin(), h1_1.end(), "Right Foot") == h1_1.end() || find(h1_1.begin(), h1_1.end(), "Left Foot") == h1_1.end()) {
+		   cout << "\"Right Foot\" and \"Left Foot\" Not Found" << endl;
+		   return 0;
+	   }
 
-	   //find Parameters
+	   //parameters per IMU
+	   int colNumber = 10;
+	   int R_I_gyro, R_I_time, R_I_accx, R_I_accy, R_I_accz;
+	   int L_I_gyro, L_I_time, L_I_accx, L_I_accy, L_I_accz;
 
-	   int gyro_index = find_if(h2.begin(), h2.end(), compare("GyroX")) - h2.begin();
-	   int Time_index = find_if(h2.begin(), h2.end(), compare("Time")) - h2.begin();
+	   for (int i = 0; i < h1_1.size(); i++)
+	   {
+		   //Right Foot
+		   if (h1_1[i] == "Right Foot") {
+			   //find Parameters
+			   R_I_gyro = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("GyroX")) - h2.begin();
+			   R_I_time = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("Time")) - h2.begin();
 
-	   int AccX_index = find_if(h2.begin(), h2.end(), compare("AccX")) - h2.begin();
-	   int AccY_index = find_if(h2.begin(), h2.end(), compare("AccY")) - h2.begin();
-	   int AccZ_index = find_if(h2.begin(), h2.end(), compare("AccZ")) - h2.begin();
+			   R_I_accx = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccX")) - h2.begin();
+			   R_I_accy = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccY")) - h2.begin();
+			   R_I_accz = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccZ")) - h2.begin();
+
+		   }
+		   else if (h1_1[i] == "Left Foot") {
+			   //find Parameters
+			   L_I_gyro = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("GyroX")) - h2.begin();
+			   L_I_time = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("Time")) - h2.begin();
+			   L_I_accx = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccX")) - h2.begin();
+			   L_I_accy = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccY")) - h2.begin();
+			   L_I_accz = find_if(h2.begin() + (i * colNumber), h2.begin() + ((i + 1) * colNumber), compare("AccZ")) - h2.begin();
+		   }
+
+	   }
 
 	   vector<string> temp;
+	   vector<double> Rgyro, Rtime, Racc;
+	   vector<double> Lgyro, Ltime, Lacc;
 	   while (getline(Data_Reader, line))
-	   {		
+	   {
 		   temp = general_function.str_split(line, ",");
-		   IMU _imu;
-		   _imu.set_param(stod(temp.at(Time_index)),stod(temp.at(gyro_index)),stod(temp.at(AccX_index)),stod(temp.at(AccY_index)),stod(temp.at(AccZ_index)));		   
-		   imu_data.push_back(_imu);	   
-	   }
-	   
-	   cout << "Line count:" << imu_data.size() << endl;
 
-	
+		   Rgyro.push_back(stod(temp.at(R_I_gyro)));
+		   Rtime.push_back(stod(temp.at(R_I_time)));
+		   Racc.push_back(stod(temp.at(R_I_accz)));
 
-	   vector<double> gyro,time,acc;	 
-	   for (auto i = imu_data.begin(); i != imu_data.end();i++) {
-		   gyro.push_back((*i).gyro);		  
-		   time.push_back((*i).time);		  
-		   acc.push_back((*i).Zacc);
+		   Lgyro.push_back(stod(temp.at(L_I_gyro)));
+		   Ltime.push_back(stod(temp.at(L_I_time)));
+		   Lacc.push_back(stod(temp.at(L_I_accz)));
+
+		   //IMU R_imu;
+		   //R_imu.set_param("Right_Foot", stod(temp.at(R_I_time)), stod(temp.at(R_I_gyro)), stod(temp.at(R_I_accx)), stod(temp.at(R_I_accy)), stod(temp.at(R_I_accz)));
+		   //imu_data.push_back(R_imu);
+		   //IMU L_imu;
+		   //L_imu.set_param("Left_Foot", stod(temp.at(L_I_time)), stod(temp.at(L_I_gyro)), stod(temp.at(L_I_accx)), stod(temp.at(L_I_accy)), stod(temp.at(L_I_accz)));
+		   //imu_data.push_back(L_imu);
 	   }
+	   cout << "Line count:" << Rtime.size() << endl;
+
+
 
 	   //apply low-pass filter
-	   vector<double> lp_data =  general_function.LowpassFilter(&gyro, 2 , 500,15);
-
+	   //vector<double> lp_data = general_function.LowpassFilter(&gyro, 2, 500, 15);
 
 
 	   //get Right foot event
-	   EventDetection _event_detector(&gyro,&acc,&time);
+	   EventDetection _event_detector(&Rgyro, &Racc, &Rtime);
 	   vector<EVENT> right_event;
-	   _event_detector.getEvent(&right_event,"R");
+	   _event_detector.getEvent(&right_event, "R");
 	   cout << "Right foot event count :" << right_event.size() << endl;
 
 	   //get Left foot event
-	   _event_detector.set_parameters(&gyro, &acc, &time);
+	   _event_detector.set_parameters(&Lgyro, &Lacc, &Ltime);
 	   vector<EVENT> left_event;
-	   _event_detector.getEvent(&left_event,"L");
+	   _event_detector.getEvent(&left_event, "L");
 	   cout << "Left foot event count :" << left_event.size() << endl;
 
+	   //-------------------------------------------------------------------------------------------//
+	   //Compute Temporal Parameters
+	   _event_detector.getTemporal(&right_event, &left_event);
+	   
+
 	   //prepare to plot
-	   vector<double> XR_event_HC, YR_event_HC, XL_event_HC, YL_event_HC, XR_event_TF, YR_event_TF, XL_event_TF, YL_event_TF;
-	   for (auto i = right_event.begin(); i != right_event.end(); i++) {
-		   if ((*i).Type == 0) {
-			   XR_event_HC.push_back((*i).xval);
-			   YR_event_HC.push_back((*i).yval);
-		   }
-		   else {
-			   XR_event_TF.push_back((*i).xval);
-			   YR_event_TF.push_back((*i).yval);
-		   }
-	   }
-	   for (auto i = left_event.begin(); i != left_event.end(); i++) {
-		   if ((*i).Type == 0) {
-			   XL_event_HC.push_back((*i).xval);
-			   YL_event_HC.push_back((*i).yval);
-		   }
-		   else {
-			   XL_event_TF.push_back((*i).xval);
-			   YL_event_TF.push_back((*i).yval);
-		   }
-	   }
+	   //------------------------------------------------------------------------------------------//
+	 //  vector<double> XR_event_HC, YR_event_HC, XL_event_HC, YL_event_HC, XR_event_TF, YR_event_TF, XL_event_TF, YL_event_TF;
+	 //  for (auto i = right_event.begin(); i != right_event.end(); i++) {
+		//   if ((*i).Type == 0) {
+		//	   XR_event_HC.push_back((*i).xval);
+		//	   YR_event_HC.push_back((*i).yval);
+		//   }
+		//   else {
+		//	   XR_event_TF.push_back((*i).xval);
+		//	   YR_event_TF.push_back((*i).yval);
+		//   }
+	 //  }
+	 //  for (auto i = left_event.begin(); i != left_event.end(); i++) {
+		//   if ((*i).Type == 0) {
+		//	   XL_event_HC.push_back((*i).xval);
+		//	   YL_event_HC.push_back((*i).yval);
+		//   }
+		//   else {
+		//	   XL_event_TF.push_back((*i).xval);
+		//	   YL_event_TF.push_back((*i).yval);
+		//   }
+	 //  }
 
 
-	   vector<vector<double>> plot_list = { gyro };
-	   
-		// Create a Plot object
-	   Plot2D plot;
-	   general_function.plot(&time, &plot_list,"Right-Gyro" , &plot);
-	   general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
-	   general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
-	   general_function.Drawplot(&plot);
+	 //  vector<vector<double>> plot_list = { gyro };
+	 //  
+		//// Create a Plot object
+	 //  Plot2D plot;
+	 //  general_function.plot(&time, &plot_list,"Right-Gyro" , &plot);
+	 //  general_function.plotPoint(&XR_event_HC, &YR_event_HC, "HC", &plot);
+	 //  general_function.plotPoint(&XR_event_TF, &YR_event_TF, "TF", &plot);
+	 //  general_function.Drawplot(&plot);
 
 
-	   //Write to File 
-	   bool res_log = general_function.WritetoFile(&XR_event_HC, &XR_event_TF, &XL_event_HC, &XL_event_TF);
-	   if (res_log) cout << "Result Saved." << endl;
-	   
+	 //  //Write to File 
+	 //  bool res_log = general_function.WritetoFile(&XR_event_HC, &XR_event_TF, &XL_event_HC, &XL_event_TF);
+	 //  if (res_log) cout << "Result Saved." << endl;
+
 
    }
 
